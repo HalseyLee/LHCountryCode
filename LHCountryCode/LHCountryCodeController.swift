@@ -34,7 +34,7 @@ class LHCountryCodeController: UIViewController {
         countryCodeTableView.dataSource = self
         countryCodeTableView.delegate = self
         countryCodeTableView.backgroundColor = UIColor.white
-        countryCodeTableView.sectionIndexColor = UIColor.clear
+        countryCodeTableView.sectionIndexBackgroundColor = UIColor.clear
         
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -43,10 +43,10 @@ class LHCountryCodeController: UIViewController {
         
         let path = Bundle.main.path(forResource: "sortedChnames", ofType: "plist")
         sortNameDict = NSDictionary(contentsOfFile: path!)!
+        
         indexArray = NSArray(array: sortNameDict.allKeys).sorted(by: { (obj1, obj2) -> Bool in
             return (obj1 as! String) < (obj2 as! String)
         }) as NSArray
-        
     }
     
     
@@ -75,6 +75,9 @@ extension LHCountryCodeController: UITableViewDelegate,UITableViewDataSource,UIS
     func updateSearchResults(for searchController: UISearchController) {
       
         
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -124,5 +127,30 @@ extension LHCountryCodeController: UITableViewDelegate,UITableViewDataSource,UIS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        if searchController.isActive {
+            return nil
+        }else{
+            return indexArray as? [String]
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        return index
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if !searchController.isActive {
+            return 30
+        }else{
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return indexArray?.object(at: section) as? String
+    }
+ 
 }
 
